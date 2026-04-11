@@ -1,0 +1,194 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: condor
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: coredox
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: midocs
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: esops
+---
+# Common Pod Template — repeat or generate for each namespace
+apiVersion: v1
+kind: Pod
+metadata:
+  name: log-agent-pod
+  namespace: condor
+  labels:
+    app: log-agent
+spec:
+  containers:
+    - name: filebeat
+      image: docker.elastic.co/beats/filebeat:8.10.2
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/ansible.log"]
+    - name: grok
+      image: grokdebug/grok
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/custom.log"]
+    - name: cs
+      image: busybox
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/app.log"]
+    - name: proexpo
+      image: busybox
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/proexpo.log"]
+  volumes:
+    - name: logs
+      hostPath:
+        path: /scripts
+        type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: log-agent-pod
+  namespace: coredox
+  labels:
+    app: log-agent
+spec:
+  containers:
+    - name: filebeat
+      image: docker.elastic.co/beats/filebeat:8.10.2
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/ansible.log"]
+    - name: grok
+      image: grokdebug/grok
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/custom.log"]
+    - name: cs
+      image: busybox
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/app.log"]
+    - name: proexpo
+      image: busybox
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/proexpo.log"]
+  volumes:
+    - name: logs
+      hostPath:
+        path: /scripts
+        type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: log-agent-pod
+  namespace: midocs
+  labels:
+    app: log-agent
+spec:
+  containers:
+    - name: filebeat
+      image: docker.elastic.co/beats/filebeat:8.10.2
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/ansible.log"]
+    - name: grok
+      image: grokdebug/grok
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/custom.log"]
+    - name: cs
+      image: busybox
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/app.log"]
+    - name: proexpo
+      image: busybox
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/proexpo.log"]
+  volumes:
+    - name: logs
+      hostPath:
+        path: /scripts
+        type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: log-agent-pod
+  namespace: esops
+  labels:
+    app: log-agent
+spec:
+  containers:
+    - name: filebeat
+      image: docker.elastic.co/beats/filebeat:8.10.2
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/ansible.log"]
+    - name: grok
+      image: grokdebug/grok
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/custom.log"]
+    - name: cs
+      image: busybox
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/app.log"]
+    - name: proexpo
+      image: busybox
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+      command: ["/bin/sh", "-c"]
+      args: ["tail -f /var/log/app/proexpo.log"]
+  volumes:
+    - name: logs
+      hostPath:
+        path: /scripts
+        type: DirectoryOrCreate
+

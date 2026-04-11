@@ -1,0 +1,18 @@
+{
+  "namespaceRules": [],
+  "tools": ["kubernetes"],
+  "credentialsPolicy": {},
+  "teams": {
+    "admin": {
+      "name": "Admin",
+      "users": ["admin"],
+      "environments": "*",
+      "namespaces": "*",
+      "allowedPaths": ["*"],
+      "blockedPaths": []
+    }
+  },
+  "credentials": {
+    "admin": "Wellcome@2026"
+  }
+}

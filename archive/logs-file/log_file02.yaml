@@ -1,0 +1,417 @@
+# ---------------- APQR Team ----------------
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-apqr-app
+  labels:
+    team: apqr
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-apqr-services
+  labels:
+    team: apqr
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-apqr-app
+  labels:
+    team: apqr
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-apqr-services
+  labels:
+    team: apqr
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-apqr-workers
+  labels:
+    team: apqr
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-apqr-app
+  labels:
+    team: apqr
+    environment: qa
+
+# ---------------- Aronda Team ----------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-aronda-app
+  labels:
+    team: aronda
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-aronda-api
+  labels:
+    team: aronda
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-aronda-app
+  labels:
+    team: aronda
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-aronda-api
+  labels:
+    team: aronda
+    environment: qa
+
+# ---------------- Condor Team ----------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-condor-microservice
+  labels:
+    team: condor
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-condor-db
+  labels:
+    team: condor
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod-condor-microservice
+  labels:
+    team: condor
+    environment: prod
+
+# ---------------- Coredox Team ----------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sbx-coredox-frontend
+  labels:
+    team: coredox
+    environment: sbx
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sbx-coredox-backend
+  labels:
+    team: coredox
+    environment: sbx
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-coredox-frontend
+  labels:
+    team: coredox
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-coredox-backend
+  labels:
+    team: coredox
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-coredox-frontend
+  labels:
+    team: coredox
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-coredox-backend
+  labels:
+    team: coredox
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-coredox-frontend
+  labels:
+    team: coredox
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-coredox-backend
+  labels:
+    team: coredox
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod-coredox-frontend
+  labels:
+    team: coredox
+    environment: prod
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod-coredox-backend
+  labels:
+    team: coredox
+    environment: prod
+
+# ---------------- D4N Team ----------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-d4n-platform
+  labels:
+    team: d4n
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-d4n-analytics
+  labels:
+    team: d4n
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-d4n-platform
+  labels:
+    team: d4n
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-d4n-analytics
+  labels:
+    team: d4n
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod-d4n-platform
+  labels:
+    team: d4n
+    environment: prod
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod-d4n-analytics
+  labels:
+    team: d4n
+    environment: prod
+
+# ---------------- Esops Team ----------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sbx-esops-app
+  labels:
+    team: esops
+    environment: sbx
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sbx-esops-services
+  labels:
+    team: esops
+    environment: sbx
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-esops-app
+  labels:
+    team: esops
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-esops-services
+  labels:
+    team: esops
+    environment: dev
+
+# ---------------- Midocs Team ----------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-midocs-app
+  labels:
+    team: midocs
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-midocs-api
+  labels:
+    team: midocs
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-midocs-app
+  labels:
+    team: midocs
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-midocs-api
+  labels:
+    team: midocs
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-midocs-app
+  labels:
+    team: midocs
+    environment: qa
+
+# ---------------- Switchgear Team ----------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-switchgear-app
+  labels:
+    team: switchgear
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-switchgear-services
+  labels:
+    team: switchgear
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod-switchgear-app
+  labels:
+    team: switchgear
+    environment: prod
+
+# ---------------- Toqdox Team ----------------
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sbx-toqdox-app
+  labels:
+    team: toqdox
+    environment: sbx
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sbx-toqdox-services
+  labels:
+    team: toqdox
+    environment: sbx
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-toqdox-app
+  labels:
+    team: toqdox
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-toqdox-services
+  labels:
+    team: toqdox
+    environment: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-toqdox-app
+  labels:
+    team: toqdox
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devint-toqdox-services
+  labels:
+    team: toqdox
+    environment: devint
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-toqdox-app
+  labels:
+    team: toqdox
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qa-toqdox-services
+  labels:
+    team: toqdox
+    environment: qa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod-toqdox-app
+  labels:
+    team: toqdox
+    environment: prod
+

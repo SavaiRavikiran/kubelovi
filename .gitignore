@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Security - Never commit kubeconfig files
+backend/configs/*-kubeconfig
+*kubeconfig*
+*.crt
+*.key
+*.pem
+
+# Synced from Helm (contains credentials) — see docs/LOCAL_TEST.md
+backend/config/teams-from-helm.json
+
+# Environment variables
+.env
+.env.local
+.env.production
+minikube-certs/
+minikube-certs/cache/

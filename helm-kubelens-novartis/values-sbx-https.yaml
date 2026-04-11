@@ -1,0 +1,15 @@
+# SBX with HTTPS on port 443 (requires TLS secret first – run scripts/create-tls-secret.sh)
+# 1) ./scripts/create-tls-secret.sh
+# 2) helm upgrade --install apps-sbxkubelens . -n apps-sbxkubelens -f values-sbx-https.yaml
+namespace: apps-sbxkubelens
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations: {}
+  hosts:
+    - kubelens.d4n-sbx.eu.novartis.net
+  tls:
+    enabled: true
+    hosts:
+      - kubelens.d4n-sbx.eu.novartis.net

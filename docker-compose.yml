@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:3006"
+    environment:
+      - NODE_ENV=production
+      - PORT=3006
+      # Optional: KUBECONFIG=/root/.kube/config
+    volumes:
+      # Mount kubeconfig and minikube certs so the app can reach minikube/Docker Desktop from inside the container
+      - ~/.kube:/root/.kube:ro
+      - ~/.minikube:/root/.minikube:ro
+      - ./backend/configs:/app/backend/configs:ro
+      # Mount policy so you can edit teams.json without rebuilding
+      - ./backend/config:/app/backend/config:ro
+    # Allow container to reach host's minikube/Docker Desktop API (Mac/Windows have host.docker.internal; Linux needs this)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge

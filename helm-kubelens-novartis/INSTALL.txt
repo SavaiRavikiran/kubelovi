@@ -1,0 +1,6 @@
+Copy this entire folder (helm-kubelens-novartis) to the client machine.
+
+SBX (always use values-sbx.yaml for correct Ingress: nginx, no TLS secret required):
+  helm upgrade --install apps-sbxkubelens ./helm-kubelens-novartis -n apps-sbxkubelens --create-namespace -f ./helm-kubelens-novartis/values-sbx.yaml
+
+If URL fails: see README.md (duplicate Ingress host, http vs https). Other envs: values-dev.yaml, values-qa.yaml, etc.

@@ -1,0 +1,202 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps-sbx-log-browser
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: log-browser-sa
+  namespace: apps-sbx-log-browser
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: log-browser-role
+rules:
+# Core resources - pods, namespaces, services
+- apiGroups: [""]
+  resources: ["pods", "namespaces", "services", "nodes"]
+  verbs: ["get", "list", "watch"]
+# Pod logs
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get", "list", "watch"]
+# Pod exec (for terminal access)
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create", "get", "list", "watch"]
+# Pod attach (for log streaming)
+- apiGroups: [""]
+  resources: ["pods/attach"]
+  verbs: ["create", "get", "list", "watch"]
+# Pod portforward
+- apiGroups: [""]
+  resources: ["pods/portforward"]
+  verbs: ["create", "get", "list", "watch"]
+# Apps resources
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "daemonsets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+# Batch resources (jobs, cronjobs)
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch"]
+# RBAC resources (for viewing permissions)
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
+  verbs: ["get", "list", "watch"]
+# ConfigMaps and Secrets (for viewing configuration)
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+# ReplicationControllers, Storage (for Explorer)
+- apiGroups: [""]
+  resources: ["replicationcontrollers", "persistentvolumes", "persistentvolumeclaims"]
+  verbs: ["get", "list", "watch"]
+# Networking (Ingress, NetworkPolicy)
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses", "networkpolicies"]
+  verbs: ["get", "list", "watch"]
+# CustomResourceDefinitions (for Explorer CRD/CR listing)
+- apiGroups: ["apiextensions.k8s.io"]
+  resources: ["customresourcedefinitions"]
+  verbs: ["get", "list", "watch"]
+# Custom resources (allow list for any CRD - cluster-scoped and namespaced)
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: log-browser-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: log-browser-role
+subjects:
+- kind: ServiceAccount
+  name: log-browser-sa
+  namespace: apps-sbx-log-browser
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: log-browser-service
+  namespace: apps-sbx-log-browser
+  labels:
+    app: log-browser
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3006
+    protocol: TCP
+  selector:
+    app: log-browser
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-browser
+  namespace: apps-sbx-log-browser
+  labels:
+    app: log-browser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-browser
+  template:
+    metadata:
+      labels:
+        app: log-browser
+    spec:
+      # Service account automatically provides in-cluster authentication
+      # No kubeconfig, certificates, or volume mounts needed!
+      serviceAccountName: log-browser-sa
+      containers:
+      - name: log-browser
+        # Docker Hub image - works automatically on any Kubernetes cluster
+        image: iitrkp/dev-kubelens:dev
+        # Always pull latest image (or use IfNotPresent for caching)
+        imagePullPolicy: Always
+        # For local clusters (minikube/kind), use:
+        # imagePullPolicy: Never
+        ports:
+        - name: http
+          containerPort: 3006
+          protocol: TCP
+        env:
+        - name: PORT
+          value: "3006"
+        # Optional: Set NODE_ENV
+        - name: NODE_ENV
+          value: "production"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3006
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3006
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        # Security context (optional - uncomment if you want to run as non-root)
+        # Note: The current Docker image runs as root. To use this, you'll need to
+        # modify the Dockerfile to create a non-root user.
+        # securityContext:
+        #   allowPrivilegeEscalation: false
+        #   runAsNonRoot: true
+        #   runAsUser: 1000
+        #   capabilities:
+        #     drop:
+        #     - ALL
+---
+# Optional: Ingress for external access
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: log-browser-ingress
+  namespace: apps-sbx-log-browser
+  annotations:
+    # For nginx ingress
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # For cert-manager (if using TLS)
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: log-browser.example.com  # Change to your domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: log-browser-service
+            port:
+              number: 80
+  # Optional: TLS configuration
+  # tls:
+  # - hosts:
+  #   - log-browser.example.com
+  #   secretName: log-browser-tls
+

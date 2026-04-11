@@ -1,0 +1,12 @@
+Kubelens (Novartis) is installed. Policy is loaded from {{ .Values.policyConfigPath }}.
+
+Access the application:
+{{- if .Values.ingress.enabled }}
+  Ingress URL: https://{{ index .Values.ingress.hosts 0 }}
+  (Ensure Ingress controller and DNS are configured for this host.)
+{{- end }}
+
+  Or port-forward: kubectl port-forward svc/{{ include "kubelens.fullname" . }} 3006:3006 -n {{ .Release.Namespace }}
+  Then open http://localhost:3006
+
+Login with any team user from your policy (e.g. admin, aronda-user, otds-user, explorer).

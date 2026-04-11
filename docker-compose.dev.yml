@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    command: sh -c "cd backend && npm install && npm run dev"
+    ports:
+      - "3006:3006"
+    environment:
+      - NODE_ENV=development
+      - PORT=3006
+      - KUBECONFIG=/app/backend/configs/kubeconfig
+      - MINIKUBE_HOME=/home/ravikiran_savai/.minikube
+    volumes:
+      - ./backend:/app/backend
+      - ~/.kube:/root/.kube:ro
+      - ~/.minikube:/home/ravikiran_savai/.minikube:ro
+      - ~/.kube/config:/app/backend/configs/kubeconfig:ro
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    command: sh -c "npm install && npm run dev -- --host"
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:3006
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

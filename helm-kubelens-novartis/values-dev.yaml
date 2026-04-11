@@ -1,0 +1,14 @@
+# Dev – nginx, HTTP on Ingress (enable TLS when you have a secret). See README.
+namespace: apps-devkubelens
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+    - kubelens.d4n-dev.eu.novartis.net
+  tls:
+    enabled: false
+    hosts:
+      - kubelens.d4n-dev.eu.novartis.net

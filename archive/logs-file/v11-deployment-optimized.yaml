@@ -1,0 +1,161 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps-sbxkubelovi
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubelovi-sa
+  namespace: apps-sbxkubelovi
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubelovi-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "namespaces", "services"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create", "get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods/attach", "pods/portforward"]
+  verbs: ["create", "get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterroles", "clusterrolebindings"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubelovi-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubelovi-role
+subjects:
+- kind: ServiceAccount
+  name: kubelovi-sa
+  namespace: apps-sbxkubelovi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubelovi
+  namespace: apps-sbxkubelovi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubelovi
+  template:
+    metadata:
+      labels:
+        app: kubelovi
+    spec:
+      serviceAccountName: kubelovi-sa
+      # Optional: Remove nodeSelector if you want it to run on any node
+      # nodeSelector:
+      #   kubernetes.io/hostname: PHCHBS-SS220169
+      containers:
+      - name: kubelovi
+        image: iitrkp/dev-kubelens:qa
+        imagePullPolicy: Always  # Always pull latest image
+        ports:
+        - containerPort: 3006
+          name: http
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3006"
+        # Optional: Set log level: 'error', 'warn', 'info', 'debug' (default: 'warn' for minimal logs)
+        # - name: LOG_LEVEL
+        #   value: "warn"
+        # IMPORTANT: Set a custom cluster/environment name to avoid IP-based names like "172"
+        # Replace "production-cluster" with your actual cluster name
+        - name: CLUSTER_NAME
+          value: "production-cluster"
+        # Optional: Only if you need to skip TLS verification
+        # - name: NODE_TLS_REJECT_UNAUTHORIZED
+        #   value: "0"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3006
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3006
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "300m"
+          limits:
+            memory: "2Gi"
+            cpu: "1500m"
+        volumeMounts:
+        - name: uploads
+          mountPath: /app/uploads
+      volumes:
+      - name: uploads
+        emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubelovi-service
+  namespace: apps-sbxkubelovi
+spec:
+  selector:
+    app: kubelovi
+  ports:
+  - name: http
+    port: 3006
+    targetPort: 3006
+    protocol: TCP
+    nodePort: 31369
+  type: NodePort
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubelovi-ingress
+  namespace: apps-sbxkubelovi
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx-plus
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kubelovi-service
+            port:
+              number: 3006
+

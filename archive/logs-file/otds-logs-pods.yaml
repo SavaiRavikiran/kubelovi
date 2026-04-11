@@ -1,0 +1,260 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: otds
+---
+# ------------------------
+# POD: cs-0
+# ------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cs-0
+  namespace: otds
+spec:
+  containers:
+    - name: cs-container
+      image: alpine:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          echo "Starting log tail for cs-0...";
+          tail -F \
+            /scripts/ansible.log \
+            /scripts/custum/*.logs \
+            /app/dctm/server/dba/log/${GR_DOCBASE}.log \
+            /app/dctm/server/dba/log/${DOCBASE_NAME}.log \
+            /app/dctm/server/dba/log/docbroker*.log \
+            /app/dctm/server/${JBOSS_VERSION}/logs/catalina.out \
+            /app/dctm/server/${JBOSS_VERSION}/logs/*.log \
+            /data/dctm/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build/ansible-*.log
+      volumeMounts:
+        - name: logs
+          mountPath: /
+  volumes:
+    - name: logs
+      hostPath:
+        path: /
+---
+# ------------------------
+# PODS: d2-0, d2conf-0, d2rest-0, d2sv-0, da-0, wfd-0
+# ------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: d2-0
+  namespace: otds
+spec:
+  containers:
+    - name: d2-container
+      image: alpine:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          echo "Starting log tail for d2-0...";
+          tail -F \
+            /data/${HOSTNAME}/logs/catalina*.log \
+            /data/${HOSTNAME}/logs/catalina.out \
+            /app/tomcat/logs/access*.log \
+            /data/${HOSTNAME}/app_data/logs/*.log \
+            /data/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build*/ansible-*.log
+      volumeMounts:
+        - name: logs
+          mountPath: /
+  volumes:
+    - name: logs
+      hostPath:
+        path: /
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: d2conf-0
+  namespace: otds
+spec:
+  containers:
+    - name: d2conf-container
+      image: alpine:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          tail -F \
+            /data/${HOSTNAME}/logs/catalina*.log \
+            /data/${HOSTNAME}/logs/catalina.out \
+            /app/tomcat/logs/access*.log \
+            /data/${HOSTNAME}/app_data/logs/*.log \
+            /data/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build*/ansible-*.log
+      volumeMounts:
+        - name: logs
+          mountPath: /
+  volumes:
+    - name: logs
+      hostPath:
+        path: /
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: d2rest-0
+  namespace: otds
+spec:
+  containers:
+    - name: d2rest-container
+      image: alpine:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          tail -F \
+            /data/${HOSTNAME}/logs/catalina*.log \
+            /data/${HOSTNAME}/logs/catalina.out \
+            /app/tomcat/logs/access*.log \
+            /data/${HOSTNAME}/app_data/logs/*.log \
+            /data/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build*/ansible-*.log
+      volumeMounts:
+        - name: logs
+          mountPath: /
+  volumes:
+    - name: logs
+      hostPath:
+        path: /
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: d2sv-0
+  namespace: otds
+spec:
+  containers:
+    - name: d2sv-container
+      image: alpine:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          tail -F \
+            /data/${HOSTNAME}/logs/catalina*.log \
+            /data/${HOSTNAME}/logs/catalina.out \
+            /app/tomcat/logs/access*.log \
+            /data/${HOSTNAME}/app_data/logs/*.log \
+            /data/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build*/ansible-*.log
+      volumeMounts:
+        - name: logs
+          mountPath: /
+  volumes:
+    - name: logs
+      hostPath:
+        path: /
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: da-0
+  namespace: otds
+spec:
+  containers:
+    - name: da-container
+      image: alpine:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          tail -F \
+            /data/${HOSTNAME}/logs/catalina*.log \
+            /data/${HOSTNAME}/logs/catalina.out \
+            /app/tomcat/logs/access*.log \
+            /data/${HOSTNAME}/app_data/logs/*.log \
+            /data/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build*/ansible-*.log
+      volumeMounts:
+        - name: logs
+          mountPath: /
+  volumes:
+    - name: logs
+      hostPath:
+        path: /
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wfd-0
+  namespace: otds
+spec:
+  containers:
+    - name: wfd-container
+      image: alpine:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          tail -F \
+            /data/${HOSTNAME}/logs/catalina*.log \
+            /data/${HOSTNAME}/logs/catalina.out \
+            /app/tomcat/logs/access*.log \
+            /data/${HOSTNAME}/app_data/logs/*.log \
+            /data/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build*/ansible-*.log
+      volumeMounts:
+        - name: logs
+          mountPath: /
+  volumes:
+    - name: logs
+      hostPath:
+        path: /
+---
+# ------------------------
+# POD: ds1-0
+# ------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ds1-0
+  namespace: otds
+spec:
+  containers:
+    - name: ds1-container
+      image: alpine:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          tail -F \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/log/server.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dsearch.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dsearchadminweb.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/cps_daemon.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/cps.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/xdb.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dfc.log
+      volumeMounts:
+        - name: logs
+          mountPath: /
+  volumes:
+    - name: logs
+      hostPath:
+        path: /
+---
+# ------------------------
+# POD: ia1-0
+# ------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ia1-0
+  namespace: otds
+spec:
+  containers:
+    - name: ia1-container
+      image: alpine:latest
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          tail -F \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/log/server.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dsearch.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dsearchadminweb.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/cps_daemon.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/cps.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/xdb.log \
+            /app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dfc.log
+      volumeMounts:
+        - name: logs
+          mountPath: /
+  volumes:
+    - name: logs
+      hostPath:
+        path: /
+

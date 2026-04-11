@@ -1,0 +1,13 @@
+# Client chart: deploy Kubelens from Docker Hub image only (no application source code).
+# Clients receive this chart + a values file; they do not need the application repo.
+apiVersion: v2
+name: kubelens-client
+description: Deploy Kubelens from Docker Hub. Configure teams, users, and access policies via values.yaml.
+type: application
+version: 0.1.0
+appVersion: "1.0"
+keywords:
+  - kubelens
+  - kubernetes
+  - logs
+  - policy

@@ -1,0 +1,36 @@
+# Kubelens Helm chart – default values (same image for all clients)
+# Default: admin / Wellcome@2026, all Kubernetes resources visible, no restrictions.
+# Clients override policyConfig in their own values file (e.g. my-client-values.yaml).
+
+replicaCount: 1
+
+image:
+  repository: kubelens
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3006
+
+# Policy config (mounted at POLICY_CONFIG_PATH). Override per client for:
+# - Custom team names and user credentials
+# - Resource-level access (namespace rules, per-team namespaces)
+# - Container path allow/restrict per team (allowedPaths, blockedPaths)
+policyConfig:
+  namespaceRules: []
+  tools:
+    - kubernetes
+  credentialsPolicy: {}
+  teams:
+    admin:
+      name: Admin
+      users: ["admin"]
+      environments: "*"
+      namespaces: "*"
+      allowedPaths: ["*"]
+      blockedPaths: []
+  credentials:
+    admin: "Wellcome@2026"
+
+policyConfigPath: /app/backend/config/policy.json

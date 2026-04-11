@@ -1,0 +1,6 @@
+Kubelens is installed. Policy is loaded from {{ .Values.policyConfigPath }}.
+
+Next steps:
+1. Ensure the app has cluster access (kubeconfig Secret or in-cluster).
+2. To change teams/users/access: edit your values file and run:
+   helm upgrade kubelens . -f <your-values.yaml>

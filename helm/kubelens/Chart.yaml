@@ -1,0 +1,11 @@
+apiVersion: v2
+name: kubelens
+description: Policy-driven Kubernetes log browser and explorer. Same image for all clients; access policies configured via values.yaml.
+type: application
+version: 0.1.0
+appVersion: "1.0"
+keywords:
+  - kubernetes
+  - logs
+  - policy
+maintainers: []

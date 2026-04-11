@@ -1,0 +1,21 @@
+# Development stage
+FROM node:18-alpine AS development
+
+WORKDIR /app
+
+# Install dependencies first for better caching
+COPY package*.json ./
+COPY backend/package*.json ./backend/
+
+# Install root and backend dependencies
+RUN npm install
+RUN cd backend && npm install
+
+# Copy application code
+COPY . .
+
+# Expose ports
+EXPOSE 3006 5173
+
+# Default command (can be overridden in docker-compose)
+CMD ["sh"]

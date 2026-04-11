@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kubelens.fullname" . }}
+  labels:
+    {{- include "kubelens.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "kubelens.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "kubelens.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "kubelens.labels" . | nindent 8 }}
+    spec:
+      {{- if .Values.rbac.create }}
+      serviceAccountName: {{ .Values.serviceAccount.name | default (include "kubelens.fullname" .) }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: kubelens
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: POLICY_CONFIG_PATH
+              value: {{ .Values.policyConfigPath | quote }}
+            {{- with .Values.env }}
+            {{- $skip := dict "NODE_ENV" true "PORT" true "POLICY_CONFIG_PATH" true }}
+            {{- range $k, $v := . }}
+            {{- if not (hasKey $skip $k) }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            - name: PORT
+              value: {{ .Values.service.port | quote }}
+          volumeMounts:
+            - name: policy-config
+              mountPath: {{ .Values.policyConfigPath | quote }}
+              subPath: policy.json
+              readOnly: true
+            {{- if .Values.kubeconfig.secretName }}
+            - name: kubeconfig
+              mountPath: {{ .Values.kubeconfig.mountPath | quote }}
+              readOnly: true
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: {{ (.Values.livenessProbe).path | default "/" }}
+              port: http
+            initialDelaySeconds: {{ (.Values.livenessProbe).initialDelaySeconds | default 15 }}
+            periodSeconds: {{ (.Values.livenessProbe).periodSeconds | default 20 }}
+          readinessProbe:
+            httpGet:
+              path: {{ (.Values.readinessProbe).path | default "/" }}
+              port: http
+            initialDelaySeconds: {{ (.Values.readinessProbe).initialDelaySeconds | default 5 }}
+            periodSeconds: {{ (.Values.readinessProbe).periodSeconds | default 10 }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: policy-config
+          configMap:
+            name: {{ include "kubelens.fullname" . }}-policy
+        {{- if .Values.kubeconfig.secretName }}
+        - name: kubeconfig
+          secret:
+            secretName: {{ .Values.kubeconfig.secretName | quote }}
+        {{- end }}

@@ -1,0 +1,276 @@
+--------------------------------------------------
+Namespace: apps-sbx-log-browser
+  Pod: log-browser-598b4c6d74-hzj66
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: log-browser-598b4c6d74-hzj66
+
+
+Namespace: apqr
+
+Namespace: condor
+  Pod: log-agent-pod
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: log-agent-pod
+
+
+Namespace: coredox
+  Pod: log-agent-pod
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: log-agent-pod
+
+
+Namespace: default
+  Pod: cs-0
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+/app/dctm/server/dba/log/${GR_DOCBASE}.log
+/app/dctm/server/dba/log/${DOCBASE_NAME}.log
+/app/dctm/server/dba/log/docbroker*.log
+/app/dctm/server/${JBOSS_VERSION}/logs/catalina.out
+/app/dctm/server/${JBOSS_VERSION}/logs/*.log
+/data/dctm/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build/ansible-*.log
+
+  Pod: d2-0
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+/data/${HOSTNAME}/logs/catalina*.log
+/data/${HOSTNAME}/logs/catalina.out
+/app/tomcat/logs/access*.log
+/data/${HOSTNAME}/app_data/logs/*.log
+/data/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build*/ansible-*.log
+
+  Pod: d2conf-0
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+/data/${HOSTNAME}/logs/catalina*.log
+/data/${HOSTNAME}/logs/catalina.out
+/app/tomcat/logs/access*.log
+/data/${HOSTNAME}/app_data/logs/*.log
+/data/${HOSTNAME}/scripts/${RELEASE_VERSION}/Build*/ansible-*.log
+
+  Pod: ds1-0
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/log/server.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dsearch.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dsearchadminweb.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/cps_daemon.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/cps.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/xdb.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dfc.log
+
+  Pod: ia1-0
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/log/server.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dsearch.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dsearchadminweb.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/cps_daemon.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/cps.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/xdb.log
+/app/xPlore/${JBOSS_VERSION}/server/DctmServer_PrimaryDsearch/logs/dfc.log
+
+
+Namespace: demo-ns
+  Pod: log-writer-pod
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: log-writer-pod
+
+
+Namespace: dev-apqr-app
+
+Namespace: dev-apqr-services
+
+Namespace: dev-coredox-backend
+
+Namespace: dev-coredox-frontend
+
+Namespace: dev-d4n-analytics
+
+Namespace: dev-d4n-platform
+
+Namespace: dev-esops-app
+
+Namespace: dev-esops-services
+
+Namespace: dev-midocs-api
+
+Namespace: dev-midocs-app
+
+Namespace: dev-toqdox-app
+
+Namespace: dev-toqdox-services
+
+Namespace: devint-apqr-app
+
+Namespace: devint-apqr-services
+
+Namespace: devint-apqr-workers
+
+Namespace: devint-aronda-api
+
+Namespace: devint-aronda-app
+
+Namespace: devint-coredox-backend
+
+Namespace: devint-coredox-frontend
+
+Namespace: devint-midocs-api
+
+Namespace: devint-midocs-app
+
+Namespace: devint-toqdox-app
+
+Namespace: devint-toqdox-services
+
+Namespace: esops
+  Pod: log-agent-pod
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: log-agent-pod
+
+
+Namespace: kube-node-lease
+
+Namespace: kube-public
+
+Namespace: kube-system
+  Pod: coredns-66bc5c9577-lxbg5
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: coredns-66bc5c9577-lxbg5
+
+  Pod: etcd-minikube
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: etcd-minikube
+
+  Pod: kube-apiserver-minikube
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: kube-apiserver-minikube
+
+  Pod: kube-controller-manager-minikube
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: kube-controller-manager-minikube
+
+  Pod: kube-proxy-zhks5
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: kube-proxy-zhks5
+
+  Pod: kube-scheduler-minikube
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: kube-scheduler-minikube
+
+  Pod: storage-provisioner
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: storage-provisioner
+
+
+Namespace: midocs
+  Pod: log-agent-pod
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: log-agent-pod
+
+
+Namespace: otds
+
+Namespace: otds-dev
+
+Namespace: prod-condor-microservice
+
+Namespace: prod-coredox-backend
+
+Namespace: prod-coredox-frontend
+
+Namespace: prod-d4n-analytics
+
+Namespace: prod-d4n-platform
+
+Namespace: prod-switchgear-app
+
+Namespace: prod-toqdox-app
+
+Namespace: qa-apqr-app
+
+Namespace: qa-aronda-api
+
+Namespace: qa-aronda-app
+
+Namespace: qa-condor-db
+
+Namespace: qa-condor-microservice
+
+Namespace: qa-coredox-backend
+
+Namespace: qa-coredox-frontend
+
+Namespace: qa-d4n-analytics
+
+Namespace: qa-d4n-platform
+
+Namespace: qa-midocs-app
+
+Namespace: qa-otds-dev
+
+Namespace: qa-switchgear-app
+
+Namespace: qa-switchgear-services
+
+Namespace: qa-toqdox-app
+
+Namespace: qa-toqdox-services
+
+Namespace: qtds
+
+Namespace: sbx-coredox-backend
+
+Namespace: sbx-coredox-frontend
+
+Namespace: sbx-esops-app
+
+Namespace: sbx-esops-services
+
+Namespace: sbx-toqdox-app
+
+Namespace: sbx-toqdox-services
+
+Namespace: subway
+
+Namespace: subway-app
+  Pod: subway-app-pod
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: subway-app-pod
+
+
+Namespace: subway-app-dev
+  Pod: subway-app-dev-pod
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: subway-app-dev-pod
+
+
+Namespace: subway-services
+  Pod: subway-services-pod
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: subway-services-pod
+
+
+Namespace: subway-services-dev
+  Pod: subway-services-dev-pod
+/scripts/custum/ansible.log
+/scripts/ansible.logs
+  No custom log paths defined for pod: subway-services-dev-pod
+
+

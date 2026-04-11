@@ -1,0 +1,11 @@
+apiVersion: v2
+name: kubelens
+description: Kubelens for Novartis – Kubernetes log browser with teams, credentials, namespace and path access. Ready to run; no values file required.
+type: application
+version: 1.0.0
+appVersion: "v13.0.0"
+keywords:
+  - kubelens
+  - kubernetes
+  - logs
+  - novartis

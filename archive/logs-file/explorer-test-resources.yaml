@@ -1,0 +1,333 @@
+# Explorer Test Resources - Apply with: kubectl apply -f explorer-test-resources.yaml
+# Creates sample resources for all Explorer UI resource types in namespace explorer-test
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: explorer-test
+  labels:
+    app: explorer-test
+
+# ========== CONFIG: ConfigMap ==========
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: explorer-test-config
+  namespace: explorer-test
+data:
+  app.conf: |
+    server.port=8080
+    app.name=explorer-test
+  env: "test"
+
+# ========== CONFIG: Secret ==========
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: explorer-test-secret
+  namespace: explorer-test
+type: Opaque
+stringData:
+  username: testuser
+  password: testpass
+
+# ========== WORKLOAD: Deployment (creates ReplicaSet automatically) ==========
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: explorer-test-deploy
+  namespace: explorer-test
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: explorer-deploy
+  template:
+    metadata:
+      labels:
+        app: explorer-deploy
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+
+# ========== WORKLOAD: Standalone ReplicaSet ==========
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: explorer-test-rs
+  namespace: explorer-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: explorer-rs
+  template:
+    metadata:
+      labels:
+        app: explorer-rs
+    spec:
+      containers:
+        - name: busybox
+          image: busybox:latest
+          command: ["sleep", "3600"]
+
+# ========== WORKLOAD: DaemonSet ==========
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: explorer-test-ds
+  namespace: explorer-test
+spec:
+  selector:
+    matchLabels:
+      app: explorer-ds
+  template:
+    metadata:
+      labels:
+        app: explorer-ds
+    spec:
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.9
+
+# ========== WORKLOAD: StatefulSet ==========
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: explorer-test-ss
+  namespace: explorer-test
+spec:
+  serviceName: explorer-test-ss
+  replicas: 2
+  selector:
+    matchLabels:
+      app: explorer-ss
+  template:
+    metadata:
+      labels:
+        app: explorer-ss
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+
+# ========== WORKLOAD: ReplicationController ==========
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: explorer-test-rc
+  namespace: explorer-test
+spec:
+  replicas: 1
+  selector:
+    app: explorer-rc
+  template:
+    metadata:
+      labels:
+        app: explorer-rc
+    spec:
+      containers:
+        - name: busybox
+          image: busybox:latest
+          command: ["sleep", "3600"]
+
+# ========== WORKLOAD: Job ==========
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: explorer-test-job
+  namespace: explorer-test
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: echo
+          image: busybox:latest
+          command: ["echo", "Explorer test job completed"]
+
+# ========== WORKLOAD: CronJob ==========
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: explorer-test-cron
+  namespace: explorer-test
+spec:
+  schedule: "*/5 * * * *"
+  suspend: true
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: echo
+              image: busybox:latest
+              command: ["echo", "Cron run at $(date)"]
+
+# ========== WORKLOAD: Standalone Pod ==========
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: explorer-test-pod
+  namespace: explorer-test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:alpine
+      ports:
+        - containerPort: 80
+
+# ========== NETWORK: Service ==========
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: explorer-test-svc
+  namespace: explorer-test
+spec:
+  selector:
+    app: explorer-deploy
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP
+
+# ========== NETWORK: Ingress ==========
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: explorer-test-ingress
+  namespace: explorer-test
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: explorer-test.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: explorer-test-svc
+                port:
+                  number: 80
+
+# ========== NETWORK: NetworkPolicy ==========
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: explorer-test-netpol
+  namespace: explorer-test
+spec:
+  podSelector:
+    matchLabels:
+      app: explorer-deploy
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+
+# ========== STORAGE: PersistentVolume (cluster-scoped) ==========
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: explorer-test-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: explorer-test-sc
+  hostPath:
+    path: /tmp/explorer-test-pv
+    type: DirectoryOrCreate
+
+# ========== STORAGE: StorageClass (for PVC) ==========
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: explorer-test-sc
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+
+# ========== STORAGE: PersistentVolumeClaim ==========
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: explorer-test-pvc
+  namespace: explorer-test
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+  storageClassName: explorer-test-sc
+  volumeName: explorer-test-pv
+
+# ========== CUSTOM RESOURCES: CustomResourceDefinition ==========
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: explorersamples.explorer.test.io
+spec:
+  group: explorer.test.io
+  names:
+    kind: ExplorerSample
+    listKind: ExplorerSampleList
+    plural: explorersamples
+    singular: explorersample
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                message:
+                  type: string
+
+# ========== CUSTOM RESOURCES: Custom Resource instance ==========
+---
+apiVersion: explorer.test.io/v1
+kind: ExplorerSample
+metadata:
+  name: explorer-test-cr
+  namespace: explorer-test
+spec:
+  message: "Sample CR for Explorer UI test"

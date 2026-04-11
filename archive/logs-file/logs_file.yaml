@@ -1,0 +1,105 @@
+# --- Namespaces ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: subway-app
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: subway-services
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: subway-app-dev
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: subway-services-dev
+
+# --- Pods in each Namespace ---
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: subway-app-pod
+  namespace: subway-app
+spec:
+  containers:
+  - name: app-container
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do echo "$(date) - subway-app log entry" >> /var/log/app.log; sleep 5; done;
+    volumeMounts:
+    - name: log-volume
+      mountPath: /var/log
+  volumes:
+  - name: log-volume
+    emptyDir: {}
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: subway-services-pod
+  namespace: subway-services
+spec:
+  containers:
+  - name: service-container
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do echo "$(date) - subway-services log entry" >> /var/log/service.log; sleep 5; done;
+    volumeMounts:
+    - name: log-volume
+      mountPath: /var/log
+  volumes:
+  - name: log-volume
+    emptyDir: {}
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: subway-app-dev-pod
+  namespace: subway-app-dev
+spec:
+  containers:
+  - name: app-dev-container
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do echo "$(date) - subway-app-dev log entry" >> /var/log/app-dev.log; sleep 5; done;
+    volumeMounts:
+    - name: log-volume
+      mountPath: /var/log
+  volumes:
+  - name: log-volume
+    emptyDir: {}
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: subway-services-dev-pod
+  namespace: subway-services-dev
+spec:
+  containers:
+  - name: service-dev-container
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do echo "$(date) - subway-services-dev log entry" >> /var/log/service-dev.log; sleep 5; done;
+    volumeMounts:
+    - name: log-volume
+      mountPath: /var/log
+  volumes:
+  - name: log-volume
+    emptyDir: {}
+

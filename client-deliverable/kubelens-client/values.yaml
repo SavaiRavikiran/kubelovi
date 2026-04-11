@@ -1,0 +1,61 @@
+# Kubelens client deployment – no application code required.
+# Use the official image from Docker Hub and configure access via policyConfig below.
+
+replicaCount: 1
+
+# Image from Docker Hub (client does not build from source)
+image:
+  repository: YOUR_DOCKERHUB_ORG/kubelens   # Replace with your Docker Hub image
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# If using a private registry, create a secret and set e.g. imagePullSecrets: [regcred]
+imagePullSecrets: []
+
+# RBAC: when true, create ServiceAccount + ClusterRole + ClusterRoleBinding so the app
+# can use in-cluster config (e.g. on minikube) to list namespaces, pods, logs, etc.
+rbac:
+  create: true
+
+# ServiceAccount used by the deployment (when rbac.create is true)
+serviceAccount:
+  create: true
+  annotations: {}
+
+# Optional: mount a Secret containing kubeconfig so the app can access the cluster.
+# Create secret: kubectl create secret generic novartis-kubeconfig --from-file=config=/path/to/kubeconfig
+# Then set kubeconfig.secretName: "novartis-kubeconfig"
+kubeconfig:
+  secretName: ""
+  mountPath: /root/.kube
+
+service:
+  type: ClusterIP
+  port: 3006
+
+# Path inside the container where policy JSON is mounted (do not change unless you know the app default)
+policyConfigPath: /app/backend/config/policy.json
+
+# =============================================================================
+# POLICY CONFIG – all client-specific configuration (teams, users, access)
+# Default: single admin user (admin / Wellcome@2026), all resources visible,
+# no restrictions → Log Browser Portal. To show Admin Dashboard (teams mgmt)
+# for a team, set canAccessAdminDashboard: true for that team.
+# Override in your own values file to add teams, credentials, namespace rules,
+# and container path allow/restrict per team.
+# =============================================================================
+policyConfig:
+  namespaceRules: []
+  tools:
+    - kubernetes
+  credentialsPolicy: {}
+  teams:
+    admin:
+      name: Admin
+      users: ["admin"]
+      environments: "*"
+      namespaces: "*"
+      allowedPaths: ["*"]
+      blockedPaths: []
+  credentials:
+    admin: "Wellcome@2026"

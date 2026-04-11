@@ -1,0 +1,41 @@
+# Minikube test – use built image iitrkp/test-kubelens:v12.0.0
+# Deploy: helm upgrade --install kubelens ./kubelens-client -f minikube-test-values.yaml -n kubelens --create-namespace
+
+replicaCount: 1
+
+image:
+  repository: iitrkp/test-kubelens
+  tag: v12.0.0
+  pullPolicy: IfNotPresent
+
+# RBAC: required for in-cluster config so the app can list namespaces, pods, logs, etc.
+rbac:
+  create: true
+
+# No kubeconfig mount – app uses in-cluster config when running inside minikube
+kubeconfig:
+  secretName: ""
+  mountPath: /root/.kube
+
+service:
+  type: NodePort
+  port: 3006
+
+policyConfigPath: /app/backend/config/policy.json
+
+# Default policy: admin / Wellcome@2026, all resources visible
+policyConfig:
+  namespaceRules: []
+  tools:
+    - kubernetes
+  credentialsPolicy: {}
+  teams:
+    admin:
+      name: Admin
+      users: ["admin"]
+      environments: "*"
+      namespaces: "*"
+      allowedPaths: ["*"]
+      blockedPaths: []
+  credentials:
+    admin: "Wellcome@2026"

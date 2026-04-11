@@ -1,0 +1,97 @@
+---
+# Quick Kubernetes Deployment for KubeLens
+# This is a simplified version - see k8s-deployment.yaml for full version
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps-sbx-log-browser
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: log-browser-sa
+  namespace: apps-sbx-log-browser
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: log-browser-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "namespaces", "services", "nodes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods/exec", "pods/attach", "pods/portforward"]
+  verbs: ["create", "get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: log-browser-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: log-browser-role
+subjects:
+- kind: ServiceAccount
+  name: log-browser-sa
+  namespace: apps-sbx-log-browser
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: log-browser-service
+  namespace: apps-sbx-log-browser
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 3006
+  selector:
+    app: log-browser
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-browser
+  namespace: apps-sbx-log-browser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-browser
+  template:
+    metadata:
+      labels:
+        app: log-browser
+    spec:
+      serviceAccountName: log-browser-sa
+      containers:
+      - name: log-browser
+        # UPDATE THIS: Replace with your image
+        image: kubelens:latest
+        # For local clusters (minikube/kind), uncomment:
+        # imagePullPolicy: Never
+        ports:
+        - containerPort: 3006
+        env:
+        - name: PORT
+          value: "3006"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+

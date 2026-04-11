@@ -1,0 +1,45 @@
+# Example Client B – minimal team + namespace pattern (esops)
+# Install: helm upgrade --install kubelens ./kubelens -f example-client-b-values.yaml
+# Same image as Novartis; only policy differs.
+
+replicaCount: 1
+
+image:
+  repository: kubelens
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3006
+
+policyConfigPath: /app/backend/config/policy.json
+
+policyConfig:
+  namespaceRules: []
+  tools:
+    - kubernetes
+  credentialsPolicy: {}
+  teams:
+    esops:
+      name: Esops Team
+      users: ["esops-user"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: "esops"
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/app/*"
+        - "/var/log/*"
+      blockedPaths: []
+    admin:
+      name: Admin
+      users: ["admin"]
+      environments: "*"
+      namespaces: "*"
+      allowedPaths: ["*"]
+      blockedPaths: []
+  credentials:
+    esops-user: "SecurePassword123"
+    admin: "AdminPassword"

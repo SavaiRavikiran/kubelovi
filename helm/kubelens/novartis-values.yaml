@@ -1,0 +1,291 @@
+# Novartis client – Kubelens Helm values
+# Install: helm upgrade --install kubelens ./kubelens -f novartis-values.yaml
+
+replicaCount: 1
+
+image:
+  repository: kubelens
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3006
+
+policyConfigPath: /app/backend/config/policy.json
+
+policyConfig:
+  namespaceRules:
+    - pattern: ".*otds.*"
+      teams: ["*"]
+    - pattern: ".*lego.*"
+      teams: ["xedi"]
+    - pattern: "paradox-.*sharedct"
+      teams: ["aronda", "coredox", "midocs"]
+    - pattern: "toqdox-.*sharedct"
+      teams: ["esops", "apqr", "condor"]
+    - pattern: "subway-.*sharedct"
+      teams: ["subway"]
+  tools:
+    - kubernetes
+  credentialsPolicy: {}
+  teams:
+    otds:
+      name: Otds Team
+      users: ["otds-user", "otds-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: otds
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    subway:
+      name: Subway Team
+      users: ["subway-user", "subway-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: subway
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    apqr:
+      name: APQR Team
+      users: ["apqr-user", "apqr-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: apqr
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    aronda:
+      name: Aronda Team
+      users: ["aronda-user", "aronda-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: aronda
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    condor:
+      name: Condor Team
+      users: ["condor-user", "condor-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: condor
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    coredox:
+      name: Coredox Team
+      users: ["coredox-user", "coredox-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: coredox
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    d4n:
+      name: D4N Team
+      users: ["d4n-user", "d4n-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: d4n
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    esops:
+      name: Esops Team
+      users: ["esops-user", "esops-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: esops
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    midocs:
+      name: Midocs Team
+      users: ["midocs-user", "midocs-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: midocs
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    switchgear:
+      name: Switchgear Team
+      users: ["switchgear-user", "switchgear-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: switchgear
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    toqdox:
+      name: Toqdox Team
+      users: ["toqdox-user", "toqdox-lead"]
+      environments: "*"
+      namespaces: "*"
+      dynamicNamespaceFiltering: true
+      namespacePattern: toqdox
+      includeEnvironmentPattern: true
+      allowedPaths:
+        - "/scripts/*"
+        - "/app/*"
+        - "/data/*"
+        - "/app/dctm/*"
+        - "/data/dctm/*"
+        - "/data/*/logs/*"
+        - "/data/*/app_data/*"
+        - "/data/*/scripts/*"
+        - "/app/tomcat/logs/*"
+        - "/app/xPlore/*"
+      blockedPaths: []
+    admin:
+      name: Admin Team
+      users: ["admin"]
+      environments: "*"
+      namespaces: "*"
+      allowedPaths: ["*"]
+      blockedPaths: []
+    explorer:
+      name: K8s Explorer
+      users: ["explorer"]
+      environments: "*"
+      namespaces: "*"
+      allowedPaths: ["*"]
+      blockedPaths: []
+  credentials:
+    otds-user: "OtDs!9xR#4vQz7Lm2WpG"
+    otds-lead: "OtDs-Ld@2Vf8$kPz1QmN"
+    subway-user: "SbWy_u5T#3rZq8Lp0!aV"
+    subway-lead: "SbWy-Ld7$Xc2!m9Gh4Rb"
+    apqr-user: "ApQr^8vW#1tLmZ0pNx6"
+    apqr-lead: "ApQr-Ld@3bV9!sK7yFp"
+    aronda-user: "Ar0ndA!4qT#6zVp2LmX"
+    aronda-lead: "Ar0ndA-Ld$7pR1!kVb9"
+    condor-user: "C0nd0r!5xQ#2zWm7LpV"
+    condor-lead: "C0nd0r-Ld@8vS3!nK4Y"
+    coredox-user: "C0reD0x!2rZ#9pLm7Qw"
+    coredox-lead: "C0reD0x-Ld$6tV1!kX8"
+    d4n-user: "D4n!9vP#3qZ7xLm2Hr"
+    d4n-lead: "D4n-Ld@1sK8!pV4zQy"
+    esops-user: "Es0pS!6rQ#2zV9mLp1"
+    esops-lead: "Es0pS-Ld$5tW3!kN8x"
+    midocs-user: "MiD0cs!3xR#8vQ2pLm7"
+    midocs-lead: "MiD0cs-Ld@9sV1!kP4z"
+    switchgear-user: "Sw1tchG!6rQ#2zVp9Lm"
+    switchgear-lead: "Sw1tchG-Ld$7tV3!kP1x"
+    toqdox-user: "ToqD0x!4pR#9zV2mLk7"
+    toqdox-lead: "ToqD0x-Ld@8sV1!kQ3y"
+    admin: "Adm!n#2025$R7vPq8Z"
+    explorer: "admin@7778"

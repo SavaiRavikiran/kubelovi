@@ -1,0 +1,14 @@
+# QA – nginx, HTTP on Ingress. See README.
+namespace: apps-qakubelens
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+    - kubelens.d4n-qa.eu.novartis.net
+  tls:
+    enabled: false
+    hosts:
+      - kubelens.d4n-qa.eu.novartis.net

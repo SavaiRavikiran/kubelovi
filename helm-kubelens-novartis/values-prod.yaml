@@ -1,0 +1,14 @@
+# Prod – nginx, HTTP on Ingress (LB often terminates TLS). Enable ingress.tls when you have a secret.
+namespace: apps-prodkubelens
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+    - kubelens.d4n.eu.novartis.net
+  tls:
+    enabled: false
+    hosts:
+      - kubelens.d4n.eu.novartis.net

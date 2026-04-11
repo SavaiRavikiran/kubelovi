@@ -1,0 +1,3 @@
+Kubelens is running. Policy is loaded from {{ .Values.policyConfigPath }} (env POLICY_CONFIG_PATH).
+
+To change policy: update the ConfigMap (e.g. via helm upgrade -f your-values.yaml) and restart the pod or send SIGHUP to the backend to reload.

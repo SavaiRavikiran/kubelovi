@@ -1,0 +1,46 @@
+{{- if .Values.ingress.enabled }}
+{{- $className := .Values.ingress.className }}
+{{- if .Values.ingress_class }}
+{{- $className = .Values.ingress_class }}
+{{- end }}
+{{- $hosts := .Values.ingress.hosts }}
+{{- if .Values.kubelens_host }}
+{{- $hosts = list .Values.kubelens_host }}
+{{- end }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "kubelens.fullname" . }}
+  labels:
+    {{- include "kubelens.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $className }}
+  ingressClassName: {{ $className }}
+  {{- end }}
+  {{- if .Values.ingress.tls.enabled }}
+  {{- $tlsSecret := .Values.ingress.tls.secretName | default (printf "%s-tls" (include "kubelens.fullname" .)) }}
+  tls:
+    - hosts:
+        {{- range $hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ $tlsSecret }}
+  {{- end }}
+  rules:
+    {{- range $hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "kubelens.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.port }}
+    {{- end }}
+{{- end }}
